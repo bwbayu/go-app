@@ -77,7 +77,8 @@ spec:
   ports:
     - port: 3306
       targetPort: 3306
-  type: ClusterIP
+  # type: ClusterIP
+  clusterIP: None
 ---
 apiVersion: batch/v1
 kind: Job
@@ -139,3 +140,35 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-root-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-app-svc
+spec:
+  selector:
+    app: go-app
+  ports:
+    - port: 8081
+      targetPort: 8081
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: go-mysql-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules: 
+  - host: localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: go-app-svc
+            port:
+              number: 8081
