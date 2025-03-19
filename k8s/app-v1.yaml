@@ -77,8 +77,8 @@ spec:
   ports:
     - port: 3306
       targetPort: 3306
-  # type: ClusterIP
-  clusterIP: None
+  type: ClusterIP
+  # clusterIP: None
 ---
 apiVersion: batch/v1
 kind: Job

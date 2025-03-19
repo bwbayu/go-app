@@ -23,6 +23,42 @@ kubectl get pods  # List all Pods
 kubectl get svc   # List all Services
 ```
 
+## 3.1. Show Kubernetes Components in Another Namespace
+By default, `kubectl get` only shows resources in the `default` namespace. To view resources in a different namespace, use:
+```sh
+kubectl get <resource> -n <namespace>
+```
+
+### Example for Ingress Nginx:
+To list all components in the `ingress-nginx` namespace:
+```sh
+kubectl get all -n ingress-nginx
+```
+To check all Ingress resources in `ingress-nginx`:
+```sh
+kubectl get ingress -n ingress-nginx
+```
+To describe a specific Ingress resource:
+```sh
+kubectl describe ingress <ingress-name> -n ingress-nginx
+```
+Example:
+```sh
+kubectl describe ingress go-mysql-ingress -n ingress-nginx
+```
+To see running Ingress Controller pods:
+```sh
+kubectl get pods -n ingress-nginx
+```
+To view logs of a specific Ingress Controller pod:
+```sh
+kubectl logs <pod-name> -n ingress-nginx
+```
+Example:
+```sh
+kubectl logs ingress-nginx-controller-abc123 -n ingress-nginx
+```
+
 ## 4. Show Logs of a Kubernetes Component
 To view logs of a specific component:
 ```sh
@@ -45,8 +81,8 @@ kubectl port-forward svc/my-service 5000:5000
 ```
 Now, you can access the service at `http://localhost:8080`.
 
-## 6. Generate Encrypt Values for secret.yaml in Base64
-To store sensitive data securely in Kubernetes secrets, you need to encode values in Base64 before adding them to secret.yaml.
+## 6. Generate Encrypted Values for secret.yaml in Base64
+To store sensitive data securely in Kubernetes secrets, encode values in Base64 before adding them to `secret.yaml`.
 ```sh
 echo -n "your-secret-value" | base64
 ```
